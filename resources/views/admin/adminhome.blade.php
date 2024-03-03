@@ -18,26 +18,54 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="submit-form.php" method="POST">
+                <form method="POST" action="{{ route('books.store') }}" enctype="multipart/form-data">
+                @csrf
                         <div class="form-control">
-                            <label for="book">book</label>
-                            <input type="text" id="name" name="name" placeholder="Enter book's Name" required />
+                        <x-input-label for="book" :value="__('Book')" />
+                            <input type="text" id="name" name="name" placeholder="Enter book's Name" required />                        </div>
+                        <div class="form-control">
+                        <x-input-label for="description" :value="__('Description')" />
+                         <textarea id="description" name="description" cols="30" rows="5" placeholder="Enter description" required></textarea>
                         </div>
                         <div class="form-control">
-                            <label for="description">Description</label>
-                            <textarea id="description" name="description" cols="30" rows="5" placeholder="Enter description" required></textarea>
-                        </div>
-                        <div class="form-control">
-                            <label for="writer">Writer</label>
+                        <x-input-label for="writer" :value="__('Writer')" />
                             <input type="text" id="writer" name="writer" placeholder="Enter writer's name" required />
                         </div>
-                        <input type="submit" value="Submit" class="submit-btn" />
+                        <div class="flex items-center justify-end mt-4">
+                    <x-primary-button class="ml-3">
+                        Create New Book
+                    </x-primary-button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                        {{ __('Book List') }}
+                    </h2>
+                    <?php 
+                    $books = [
+    ['id' => '1', 'name' => 'Book 1', 'description' => 'Description 1', 'writer' => 'Writer 1'],
+    ['id' => '2', 'name' => 'Book 2', 'description' => 'Description 2', 'writer' => 'Writer 2'],
+    ['id' => '3', 'name' => 'Book 3', 'description' => 'Description 3', 'writer' => 'Writer 3'],
+];
+foreach ($books as $book): ?>
+                        <div class="book-item">
+                            <h3><?php    echo htmlspecialchars('Book ID: ' . $book['id']); ?></h3>
+                            <h3><?php    echo htmlspecialchars('Book name: ' . $book['name']); ?></h3>
+                            <p><?php    echo htmlspecialchars('Book description: ' . $book['description']); ?></p>
+                            <p>Written by: <?php    echo htmlspecialchars($book['writer']); ?></p>
+                            <button class="book-button" onclick="alert('Button clicked for <?php    echo addslashes($book['name']); ?>')">Delete Book</button>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
     <style>
         .form-control {
             margin-bottom: 10px;
@@ -64,6 +92,22 @@
         }
         .submit-btn:hover {
             background-color: #45a049;
+        }
+        .book-item {
+            background-color: #2D3748;
+            color: white;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .book-button {
+            background-color: #E2E8F0;
+            color: #1A202C;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
         }
     </style>
 </x-app-layout>
