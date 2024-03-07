@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\BooksController;
+use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
@@ -14,11 +14,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/error', function () {
-    return view('errors.generic');
-});
 // Routes for ADMINS
-Route::post('/store', [BooksController::class, 'store'])->middleware('auth')->name('books.store');
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
+
+Route::prefix('/admin/books')->middleware(['ensure_admin', 'auth'])->group(function () {
+    Route::get('/', [BookController::class, 'index'])->name('books.index');
+    Route::post('/store', [BookController::class, 'store'])->name('books.store');
+});
+
 
 require __DIR__ . '/auth.php';

@@ -41,31 +41,26 @@
         </div>
     </div>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                        {{ __('Book List') }}
-                    </h2>
-                    <?php 
-                    $books = [
-    ['id' => '1', 'name' => 'Book 1', 'description' => 'Description 1', 'writer' => 'Writer 1'],
-    ['id' => '2', 'name' => 'Book 2', 'description' => 'Description 2', 'writer' => 'Writer 2'],
-    ['id' => '3', 'name' => 'Book 3', 'description' => 'Description 3', 'writer' => 'Writer 3'],
-];
-foreach ($books as $book): ?>
-                        <div class="book-item">
-                            <h3><?php    echo htmlspecialchars('Book ID: ' . $book['id']); ?></h3>
-                            <h3><?php    echo htmlspecialchars('Book name: ' . $book['name']); ?></h3>
-                            <p><?php    echo htmlspecialchars('Book description: ' . $book['description']); ?></p>
-                            <p>Written by: <?php    echo htmlspecialchars($book['writer']); ?></p>
-                            <button class="book-button" onclick="alert('Button clicked for <?php    echo addslashes($book['name']); ?>')">Delete Book</button>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900 dark:text-gray-100">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Book List') }}
+                </h2>
+                @foreach ($books as $book)
+                    <div class="book-item">
+                        <h3>{{ 'Book ID: ' . e($book['id']) }}</h3>
+                        <h3>{{ 'Book name: ' . e($book['name']) }}</h3>
+                        <p>{{ 'Book description: ' . e($book['description']) }}</p>
+                        <p>Written by: {{ e($book['writer']) }}</p>
+                        <button class="book-button" >Delete Book</button>
+                        <button class="book-button" >Edit Book</button>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
+</div>
     <style>
         .form-control {
             margin-bottom: 10px;
