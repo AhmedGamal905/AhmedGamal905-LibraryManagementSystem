@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 
-class HomeController extends Controller
+class HomeController
 {
-    public function index()
+    public function __invoke()
     {
-        $books = Book::all();
-        return view('dashboard')->with('books', $books);
+        $books = Book::query()
+            ->latest()
+            ->paginate();
+
+        return view('dashboard', compact('books'));
     }
 }
