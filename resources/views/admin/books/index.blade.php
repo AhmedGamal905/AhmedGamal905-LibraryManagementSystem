@@ -15,7 +15,6 @@
             @forelse ($books as $book)
                 <div class="bg-white p-4 text-black shadow sm:rounded-lg sm:p-8 dark:bg-gray-800 dark:text-white">
                     <div class="flex items-start justify-between">
-
                         <div class="flex flex-col gap-2">
                             <span>{{ __('Name') }}:{{ $book->name }}</span>
                             <span>{{ __('Written by') }}:{{ $book->writer }}</span>
