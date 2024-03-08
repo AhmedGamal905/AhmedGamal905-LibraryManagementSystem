@@ -4,48 +4,59 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
-class BookController extends Controller
+class BookController
 {
     public function index()
     {
-        $books = Book::all();
-        return view('admin.books.index', ['books' => $books]);
+        $books = Book::query()
+            ->latest()
+            ->paginate();
+
+        return view('admin.books.index', compact('books'));
+    }
+
+    public function create()
+    {
+        return view('admin.books.create');
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|unique:books|max:255',
+            'name' => ['required', 'unique:books', 'max:255'],
             'description' => 'required',
             'writer' => 'required',
         ]);
+
         Book::create($data);
-        return redirect()->route('home');
+
+        return to_route('admin.books.index');
     }
+
     public function edit(Book $book)
     {
-        return view('admin.books.edit', ['book' => $book]);
+        return view('admin.books.edit', compact('book'));
     }
 
-
-    public function update(Book $book, Request $request)
+    public function update(Request $request, Book $book)
     {
         $data = $request->validate([
-            'name' => 'required|max:255',
+            'name' => ['required', Rule::unique('books')->ignore($book), 'max:255'],
             'description' => 'required',
             'writer' => 'required',
         ]);
 
         $book->update($data);
 
-        return redirect()->route('home');
+        return to_route('admin.books.index');
     }
 
     public function destroy(Book $book)
     {
         $book->delete();
-        return redirect()->back();
+
+        return to_route('admin.books.index');
     }
 }
