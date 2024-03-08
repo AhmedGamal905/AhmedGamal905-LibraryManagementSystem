@@ -53,9 +53,13 @@
                         <h3>{{ 'Book name: ' . e($book['name']) }}</h3>
                         <p>{{ 'Book description: ' . e($book['description']) }}</p>
                         <p>Written by: {{ e($book['writer']) }}</p>
-                        <button class="book-button" >Delete Book</button>
-                        <button class="book-button" >Edit Book</button>
-                    </div>
+                        <form method="POST" action="{{ route('books.destroy', $book) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="book-button">Delete Book</button>
+                        </form>
+                        <a href="{{ route('books.edit', $book) }}" class="book-button">Edit Book</a>
+                        </div>
                 @endforeach
             </div>
         </div>

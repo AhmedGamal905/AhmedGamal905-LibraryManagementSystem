@@ -14,12 +14,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-// Routes for ADMINS
+
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
 
 Route::prefix('/admin/books')->middleware(['ensure_admin', 'auth'])->group(function () {
     Route::get('/', [BookController::class, 'index'])->name('books.index');
     Route::post('/store', [BookController::class, 'store'])->name('books.store');
+    Route::delete('/destroy/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+    Route::get('/edit/{book}', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/update/{book}', [BookController::class, 'update'])->name('books.update');
+
 });
 
 

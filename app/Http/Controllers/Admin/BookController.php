@@ -16,21 +16,36 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        $bookData = $request->validate([
+        $data = $request->validate([
             'name' => 'required|unique:books|max:255',
             'description' => 'required',
             'writer' => 'required',
         ]);
-        Book::create($bookData);
+        Book::create($data);
         return redirect()->route('home');
     }
-    public function edit()
+    public function edit(Book $book)
     {
+        return view('admin.books.edit', ['book' => $book]);
+    }
 
-    }
-    public function destroy(Request $request)
+
+    public function update(Book $book, Request $request)
     {
-        Book::destroy($request);
+        $data = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'writer' => 'required',
+        ]);
+
+        $book->update($data);
+
         return redirect()->route('home');
+    }
+
+    public function destroy(Book $book)
+    {
+        $book->delete();
+        return redirect()->back();
     }
 }
