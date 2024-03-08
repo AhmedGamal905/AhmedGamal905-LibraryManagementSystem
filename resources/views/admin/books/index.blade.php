@@ -18,53 +18,61 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                <form method="POST" action="{{ route('books.store') }}" enctype="multipart/form-data">
-                @csrf
+                    <form method="POST" action="{{ route('books.store') }}" enctype="multipart/form-data">
+                        @csrf
                         <div class="form-control">
-                        <x-input-label for="book" :value="__('Book')" />
-                            <input type="text" id="name" name="name" placeholder="Enter book's Name" required />                        </div>
-                        <div class="form-control">
-                        <x-input-label for="description" :value="__('Description')" />
-                         <textarea id="description" name="description" cols="30" rows="5" placeholder="Enter description" required></textarea>
+                            <label for="name">{{ __('Book') }}</label>
+                            <input type="text" id="name" name="name" placeholder="Enter book's Name" required />
                         </div>
                         <div class="form-control">
-                        <x-input-label for="writer" :value="__('Writer')" />
+                            <label for="description">{{ __('Description') }}</label>
+                            <textarea id="description" name="description" cols="30" rows="5" placeholder="Enter description" required></textarea>
+                        </div>
+                        <div class="form-control">
+                            <label for="writer">{{ __('Writer') }}</label>
                             <input type="text" id="writer" name="writer" placeholder="Enter writer's name" required />
                         </div>
                         <div class="flex items-center justify-end mt-4">
-                    <x-primary-button class="ml-3">
-                        Create New Book
-                    </x-primary-button>
+                            <button type="submit" class="submit-btn">
+                                {{ __('Create New Book') }}
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
     <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ __('Book List') }}
-                </h2>
-                @foreach ($books as $book)
-                    <div class="book-item">
-                        <h3>{{ 'Book ID: ' . e($book['id']) }}</h3>
-                        <h3>{{ 'Book name: ' . e($book['name']) }}</h3>
-                        <p>{{ 'Book description: ' . e($book['description']) }}</p>
-                        <p>Written by: {{ e($book['writer']) }}</p>
-                        <form method="POST" action="{{ route('books.destroy', $book) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="book-button">Delete Book</button>
-                        </form>
-                        <a href="{{ route('books.edit', $book) }}" class="book-button">Edit Book</a>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                        {{ __('Book List') }}
+                    </h2>
+                    @foreach ($books as $book)
+                        <div class="book-item">
+                            <h3>{{ __('Book ID: ') . e($book['id']) }}</h3>
+                            <h3>{{ __('Book name: ') . e($book['name']) }}</h3>
+                            <p>{{ __('Book description: ') . e($book['description']) }}</p>
+                            <p>{{ __('Written by: ') . e($book['writer']) }}</p>
+                            <div class="button-container">
+                                <form method="POST" action="{{ route('books.destroy', $book) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="book-button delete-button">
+                                        {{ __('Delete Book') }}
+                                    </button>
+                                </form>
+                                <a href="{{ route('books.edit', $book) }}" class="book-button edit-button">
+                                    {{ __('Edit Book') }}
+                                </a>
+                            </div>
                         </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
-</div>
     <style>
         .form-control {
             margin-bottom: 10px;
@@ -88,6 +96,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.7s;
         }
         .submit-btn:hover {
             background-color: #45a049;
@@ -100,13 +109,31 @@
             border-radius: 5px;
         }
         .book-button {
-            background-color: #E2E8F0;
-            color: #1A202C;
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
             cursor: pointer;
             text-decoration: none;
+            transition: background-color 0.7s;
+        }
+        .edit-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .edit-button:hover {
+            background-color: #45a049;
+        }
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+        }
+        .delete-button:hover {
+            background-color: #da190b;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
 </x-app-layout>
