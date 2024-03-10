@@ -19,8 +19,9 @@
                             <span>{{ __('Name') }}:{{ $book->name }}</span>
                             <span>{{ __('Written by') }}:{{ $book->writer }}</span>
                             <p class="mt-4 text-lg">{{ $book->description }}</p>
+                            <span>{{ __('status') }}:{{ $book->status }}</span>
                             <small class="text-sm">
-                                {{ $book->created_at->format('j M Y, g:i a') }}
+                            {{ __('Added at') }}: {{ $book->created_at->format('j M Y, g:i a') }}
                             </small>
                         </div>
 

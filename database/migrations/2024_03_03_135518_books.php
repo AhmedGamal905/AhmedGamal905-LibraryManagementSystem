@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('description');
             $table->string('writer');
+            $table->string('status')->default('available');
             $table->timestamps();
         });
     }

@@ -20,6 +20,11 @@
                             {{ __('Books') }}
                         </x-nav-link>
                     @endif
+                    @if (Auth::user()->type == 'user')
+                    <x-nav-link :href="route('user.borrow.index')" :active="request()->routeIs('user.books.*')">
+                            {{ __('Borrowing History') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
