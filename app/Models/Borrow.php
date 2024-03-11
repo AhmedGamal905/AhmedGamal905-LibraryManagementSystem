@@ -9,10 +9,14 @@ class Borrow extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public function book()
+    {
+        return $this->belongsTo(Book::class, 'book_id');
+    }
     protected $fillable = [
-        'borrow_date',
         'due_date',
         'book_id',
+        'status',
         'user_id',
     ];
 }

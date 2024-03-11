@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BorrowStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +13,11 @@ return new class extends Migration {
     {
         Schema::create('borrows', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('borrow_date');
             $table->date('due_date');
             $table->foreignId('book_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->string('status')->default(BorrowStatus::INPROGRESS);
+            $table->timestamps();
         });
     }
 
