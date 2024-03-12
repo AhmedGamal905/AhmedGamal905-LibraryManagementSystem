@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Borrow extends Model
 {
     use HasFactory;
-    public $timestamps = false;
     public function book()
     {
-        return $this->belongsTo(Book::class, 'book_id');
+        return $this->belongsTo(Book::class);
     }
     protected $fillable = [
         'due_date',

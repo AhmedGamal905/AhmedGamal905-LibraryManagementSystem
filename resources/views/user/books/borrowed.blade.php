@@ -33,10 +33,10 @@
                                 <div class="status-box {{ $borrowedBook->status == 'inprogress' ? 'status-inprogress' : 'status-returned' }}">
                                     {{ $borrowedBook->status == 'inprogress' ? __('In Progress') : __('Returned') }}
                                 </div>
+                            <span>{{ __('Borrowed since:') }} {{ $borrowedBook->created_at->format('Y-m-d') }}</span>
                             <span>{{ __('Borrowed Book due date:') }} {{ $borrowedBook->due_date }}</span>
-                            <span>{{ __('Borrowed Book name:') }} {{ $borrowedBook->book->name }}</span>
-                            <span>{{ __('Book writer:') }} {{ $borrowedBook->book->writer }}</span>
-                            <p class="mt-4 text-lg">{{ $borrowedBook->id }}</p>
+                            <span>{{ __('Book name:') }} {{ $borrowedBook->book->name }}</span>
+                            <span>{{ __('ID:') }} {{ $borrowedBook->id }}</span>
                         </div>
                         @if($borrowedBook->status == 'inprogress')
                             <div class="flex items-center gap-4">

@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 
 class BorrowController
 {
-
     public function index()
     {
         $borrowedBooks = Borrow::where('user_id', auth()->user()->id)
@@ -34,10 +33,11 @@ class BorrowController
         $book->status = BookStatus::UNAVAILABLE;
         $book->save();
         Borrow::create($data);
+        return to_route('user.borrow.index');
     }
     public function update()
     {
-        // will update the borrowed status when the user click return
+
     }
 }
-//findOrFail($id)
+// findOrFail($id)
