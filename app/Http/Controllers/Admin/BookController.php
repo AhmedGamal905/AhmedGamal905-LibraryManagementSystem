@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Book;
+use App\Enums\BookStatus;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -49,13 +50,16 @@ class BookController
         ]);
 
         $book->update($data);
+        $book->status = BookStatus::AVAILABLE;
+        $book->save();
 
         return to_route('admin.books.index');
     }
 
     public function destroy(Book $book)
     {
-        $book->delete();
+        $book->status = BookStatus::UNAVAILABLE;
+        $book->save();
 
         return to_route('admin.books.index');
     }

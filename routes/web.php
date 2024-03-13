@@ -18,6 +18,7 @@ Route::get('/home', HomeController::class)->middleware('auth')->name('home');
 
 Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
     Route::put('/books/{book}/borrow', [BorrowController::class, 'store'])->name('borrow.store');
+    Route::put('/books/{borrowedBook}/update', [BorrowController::class, 'update'])->name('borrow.update');
     Route::get('/history', [BorrowController::class, 'index'])->name('borrow.index');
 });
 

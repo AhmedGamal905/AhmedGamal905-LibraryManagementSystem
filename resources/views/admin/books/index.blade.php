@@ -30,7 +30,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <x-danger-button>
-                                    {{ __('Delete') }}
+                                    {{ __('Unlist') }}
                                 </x-danger-button>
                             </form>
 

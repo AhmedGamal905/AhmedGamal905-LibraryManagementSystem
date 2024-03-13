@@ -22,7 +22,7 @@ class BorrowController
         return view('user.books.borrowed', compact('borrowedBooks'));
     }
 
-    public function store(Request $request, Book $book)
+    public function store(Book $book)
     {
         $data = [
             'due_date' => Carbon::now()->addWeek(),
@@ -35,9 +35,12 @@ class BorrowController
         Borrow::create($data);
         return to_route('user.borrow.index');
     }
-    public function update()
+    public function update(Borrow $borrowedBook)
     {
-
+        $borrowedBook->status = BorrowStatus::RETURNED;
+        $borrowedBook->book->status = BookStatus::AVAILABLE;
+        $borrowedBook->save();
+        $borrowedBook->book->save();
+        return to_route('home');
     }
 }
-// findOrFail($id)

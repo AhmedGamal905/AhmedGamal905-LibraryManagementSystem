@@ -40,7 +40,7 @@
                         </div>
                         @if($borrowedBook->status == 'inprogress')
                             <div class="flex items-center gap-4">
-                                <form method="POST" action="{{ route('user.borrow.store', $borrowedBook) }}">
+                                <form method="POST" action="{{ route('user.borrow.update', $borrowedBook) }}">
                                     @csrf
                                     @method('put')
                                     <x-primary-button class="mt-4">{{ __('Return Book') }}</x-primary-button>
