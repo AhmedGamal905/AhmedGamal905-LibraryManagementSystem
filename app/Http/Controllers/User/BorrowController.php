@@ -7,7 +7,6 @@ use App\Enums\BorrowStatus;
 use Carbon\Carbon;
 use App\Models\Book;
 use App\Models\Borrow;
-use Illuminate\Http\Request;
 
 
 class BorrowController
@@ -15,7 +14,11 @@ class BorrowController
     public function index()
     {
         $borrowedBooks = Borrow::where('user_id', auth()->user()->id)
-            ->with('book')
+            ->with([
+                'book' => function ($query) {
+                    return $query->withTrashed();
+                }
+            ])
             ->latest()
             ->paginate();
 

@@ -58,8 +58,9 @@ class BookController
 
     public function destroy(Book $book)
     {
-        $book->status = BookStatus::UNAVAILABLE;
-        $book->save();
+        // $book->status = BookStatus::UNAVAILABLE;
+        // $book->save();
+        $book->delete();
 
         return to_route('admin.books.index');
     }

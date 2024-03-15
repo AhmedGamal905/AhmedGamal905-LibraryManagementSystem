@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('description');
             $table->string('writer');
             $table->string('status')->default(BookStatus::AVAILABLE);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
