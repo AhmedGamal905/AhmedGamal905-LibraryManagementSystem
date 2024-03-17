@@ -24,7 +24,16 @@ class BooksTest extends TestCase
         $this->admin = User::where('type', UserType::ADMIN)->first();
         $this->book = Book::first();
     }
+    public function test_admin_can_view_index(): void
+    {
+        $this->actingAs($this->admin);
 
+        $response = $this->get(route('admin.books.index'));
+
+        $response->assertStatus(200);
+
+        $response->assertViewHas('books');
+    }
     public function test_admin_can_store(): void
     {
 

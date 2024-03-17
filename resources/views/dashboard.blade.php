@@ -15,7 +15,7 @@
     </x-slot>
     <div class="py-12">
         <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-        @foreach ($books as $book)
+        @forelse ($books as $book)
     <div class="bg-white p-4 text-black shadow sm:rounded-lg sm:p-8 dark:bg-gray-800 dark:text-white">
         <div class="flex items-start justify-between">
             <div class="flex flex-col gap-2">
@@ -32,7 +32,13 @@
             </form>
         </div>
     </div>
-            @endforeach
+    @empty
+                <div class="bg-white p-4 text-black shadow sm:rounded-lg sm:p-8 dark:bg-gray-800 dark:text-white">
+                    <div class="flex items-start justify-between">
+                        <span>{{ __('No available books') }}</span>
+                    </div>
+                </div>
+            @endforelse
             @if ($books->hasPages())
                 {{ $books->links() }}
             @endif

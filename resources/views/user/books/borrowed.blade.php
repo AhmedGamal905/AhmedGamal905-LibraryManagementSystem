@@ -26,13 +26,13 @@
     </x-slot>
     <div class="py-12">
         <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-            @foreach ($borrowedBooks as $borrowedBook)
+            @forelse ($borrowedBooks as $borrowedBook)
                 <div class="bg-white p-4 text-black shadow sm:rounded-lg sm:p-8 dark:bg-gray-800 dark:text-white">
                     <div class="flex items-start justify-between">
                         <div class="flex flex-col gap-2"> 
-                                <div class="status-box {{ $borrowedBook->status == 'inprogress' ? 'status-inprogress' : 'status-returned' }}">
-                                    {{ $borrowedBook->status == 'inprogress' ? __('In Progress') : __('Returned') }}
-                                </div>
+                            <div class="status-box {{ $borrowedBook->status == 'inprogress' ? 'status-inprogress' : 'status-returned' }}">
+                                {{ $borrowedBook->status == 'inprogress' ? __('In Progress') : __('Returned') }}
+                            </div>
                             <span>{{ __('Borrowed since:') }} {{ $borrowedBook->created_at->format('Y-m-d') }}</span>
                             <span>{{ __('Borrowed Book due date:') }} {{ $borrowedBook->due_date }}</span>
                             <span>{{ __('Book name:') }} {{ $borrowedBook->book->name }}</span>
@@ -49,7 +49,13 @@
                         @endif
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="bg-white p-4 text-black shadow sm:rounded-lg sm:p-8 dark:bg-gray-800 dark:text-white">
+                    <div class="flex items-start justify-between">
+                        <span>{{ __('Start borrowing books!') }}</span>
+                    </div>
+                </div>
+            @endforelse
             @if ($borrowedBooks->hasPages())
                 {{ $borrowedBooks->links() }}
             @endif
