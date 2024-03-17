@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Enums\UserType;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -16,10 +18,9 @@ class UserAccessTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-
-        $this->admin = User::factory()->create(['type' => 'admin']);
-        $this->user = User::factory()->create();
+        $this->seed(UserSeeder::class);
+        $this->admin = User::where('type', UserType::ADMIN)->first();
+        $this->user = User::where('type', UserType::USER)->first();
     }
 
     public function test_admin_has_access_to_create_new_books(): void

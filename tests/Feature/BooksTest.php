@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserType;
 use Tests\TestCase;
 use App\Models\Book;
 use App\Models\User;
+use Database\Seeders\BookSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BooksTest extends TestCase
@@ -16,15 +19,29 @@ class BooksTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->admin = User::factory()->create(['type' => 'admin']);
-        $this->book = Book::factory()->create();
+        $this->seed(BookSeeder::class);
+        $this->seed(UserSeeder::class);
+        $this->admin = User::where('type', UserType::ADMIN)->first();
+        $this->book = Book::first();
     }
 
-    public function test_data_count_stored_in_database(): void
+    public function test_admin_can_store(): void
     {
 
-        $this->assertDatabaseCount('books', 1);
+        $this->actingAs($this->admin);
+
+        $newData = [
+            'name' => 'New book',
+            'description' => 'New book Description',
+            'writer' => 'New book Writer',
+        ];
+
+        $response = $this->post(route('admin.books.store'), $newData);
+
+        $response->assertRedirect(route('admin.books.index'));
+
+        $this->assertDatabaseHas('books', $newData);
+
     }
     public function test_admin_can_update(): void
     {
