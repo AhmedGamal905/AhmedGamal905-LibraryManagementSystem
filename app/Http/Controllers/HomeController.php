@@ -12,6 +12,7 @@ class HomeController
         $books = Book::where('status', BookStatus::AVAILABLE)
             ->latest()
             ->paginate();
+
         return view('dashboard', compact('books'));
     }
 }

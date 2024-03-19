@@ -3,17 +3,19 @@
 namespace Tests\Feature;
 
 use App\Enums\UserType;
-use Tests\TestCase;
 use App\Models\Book;
 use App\Models\User;
 use Database\Seeders\BookSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BooksTest extends TestCase
 {
     use RefreshDatabase;
+
     protected Book $book;
+
     protected User $admin;
 
     protected function setUp(): void
@@ -24,6 +26,7 @@ class BooksTest extends TestCase
         $this->admin = User::where('type', UserType::ADMIN)->first();
         $this->book = Book::first();
     }
+
     public function test_admin_can_view_index(): void
     {
         $this->actingAs($this->admin);
@@ -34,6 +37,7 @@ class BooksTest extends TestCase
 
         $response->assertViewHas('books');
     }
+
     public function test_admin_can_store(): void
     {
 
@@ -52,6 +56,7 @@ class BooksTest extends TestCase
         $this->assertDatabaseHas('books', $newData);
 
     }
+
     public function test_admin_can_update(): void
     {
 
@@ -74,6 +79,7 @@ class BooksTest extends TestCase
             'writer' => 'Updated Writer',
         ]);
     }
+
     public function test_data_soft_delete(): void
     {
         $this->actingAs($this->admin);

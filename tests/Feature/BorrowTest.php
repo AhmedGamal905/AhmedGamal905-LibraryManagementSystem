@@ -2,25 +2,26 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Book;
-use App\Models\User;
-use App\Models\Borrow;
-use App\Enums\UserType;
 use App\Enums\BookStatus;
 use App\Enums\BorrowStatus;
-use Illuminate\Support\Carbon;
+use App\Enums\UserType;
+use App\Models\Book;
+use App\Models\Borrow;
+use App\Models\User;
 use Database\Seeders\BookSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
-
+use Illuminate\Support\Carbon;
+use Tests\TestCase;
 
 class BorrowTest extends TestCase
 {
     use RefreshDatabase;
+
     protected Book $book;
+
     protected User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,6 +41,7 @@ class BorrowTest extends TestCase
 
         $response->assertViewHas('borrowedBooks');
     }
+
     public function test_user_can_store(): void
     {
         $this->actingAs($this->user);
@@ -50,6 +52,7 @@ class BorrowTest extends TestCase
 
         $this->assertEquals(BookStatus::UNAVAILABLE->value, $this->book->fresh()->status);
     }
+
     public function test_user_can_update(): void
     {
         $this->actingAs($this->user);
@@ -67,5 +70,4 @@ class BorrowTest extends TestCase
 
         $this->assertEquals(BookStatus::AVAILABLE->value, $borrowedBook->book->fresh()->status);
     }
-
 }
