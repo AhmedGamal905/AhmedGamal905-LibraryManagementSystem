@@ -46,10 +46,8 @@ class UserFactory extends Factory
 
     public function admin()
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'type' => UserType::ADMIN,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => UserType::ADMIN,
+        ]);
     }
 }

@@ -7,14 +7,17 @@
             margin-bottom: 10px;
             border-radius: 5px;
         }
+
         .status-box {
             padding: 8px;
             border-radius: 5px;
             text-align: center;
         }
+
         .status-inprogress {
             background-color: #f6ad55;
         }
+
         .status-returned {
             background-color: #68d391;
         }
@@ -29,16 +32,16 @@
             @forelse ($borrowedBooks as $borrowedBook)
                 <div class="bg-white p-4 text-black shadow sm:rounded-lg sm:p-8 dark:bg-gray-800 dark:text-white">
                     <div class="flex items-start justify-between">
-                        <div class="flex flex-col gap-2"> 
-                            <div class="status-box {{ $borrowedBook->status == 'inprogress' ? 'status-inprogress' : 'status-returned' }}">
-                                {{ $borrowedBook->status == 'inprogress' ? __('In Progress') : __('Returned') }}
+                        <div class="flex flex-col gap-2">
+                            <div class="status-box {{ $borrowedBook->status->classes() }}">
+                                {{ $borrowedBook->status->label() }}
                             </div>
                             <span>{{ __('Borrowed since:') }} {{ $borrowedBook->created_at->format('Y-m-d') }}</span>
                             <span>{{ __('Borrowed Book due date:') }} {{ $borrowedBook->due_date }}</span>
                             <span>{{ __('Book name:') }} {{ $borrowedBook->book->name }}</span>
                             <span>{{ __('ID:') }} {{ $borrowedBook->id }}</span>
                         </div>
-                        @if($borrowedBook->status == 'inprogress')
+                        @if ($borrowedBook->status->isInprogress())
                             <div class="flex items-center gap-4">
                                 <form method="POST" action="{{ route('user.borrow.update', $borrowedBook) }}">
                                     @csrf

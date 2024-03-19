@@ -2,94 +2,66 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserType;
 use App\Models\Book;
 use App\Models\User;
-use Database\Seeders\BookSeeder;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class BooksTest extends TestCase
 {
-    use RefreshDatabase;
-
-    protected Book $book;
-
-    protected User $admin;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed(BookSeeder::class);
-        $this->seed(UserSeeder::class);
-        $this->admin = User::where('type', UserType::ADMIN)->first();
-        $this->book = Book::first();
-    }
+    use LazilyRefreshDatabase;
 
     public function test_admin_can_view_index(): void
     {
-        $this->actingAs($this->admin);
+        $admin = User::factory()->admin()->create();
 
-        $response = $this->get(route('admin.books.index'));
-
-        $response->assertStatus(200);
-
-        $response->assertViewHas('books');
+        $this
+            ->actingAs($admin)
+            ->get(route('admin.books.index'))
+            ->assertStatus(200)
+            ->assertViewHas('books');
     }
 
     public function test_admin_can_store(): void
     {
+        $admin = User::factory()->admin()->create();
+        $newBook = Book::factory()->make();
 
-        $this->actingAs($this->admin);
+        $this
+            ->actingAs($admin)
+            ->post(route('admin.books.store'), $newBook->toArray())
+            ->assertRedirect(route('admin.books.index'));
 
-        $newData = [
-            'name' => 'New book',
-            'description' => 'New book Description',
-            'writer' => 'New book Writer',
-        ];
-
-        $response = $this->post(route('admin.books.store'), $newData);
-
-        $response->assertRedirect(route('admin.books.index'));
-
-        $this->assertDatabaseHas('books', $newData);
-
+        $this->assertDatabaseHas('books', $newBook->toArray());
     }
 
     public function test_admin_can_update(): void
     {
+        $admin = User::factory()->admin()->create();
 
-        $this->actingAs($this->admin);
+        $book = Book::factory()->create();
 
-        $updateData = [
-            'name' => 'Updated Book Name',
-            'description' => 'Updated Description',
-            'writer' => 'Updated Writer',
-        ];
+        $updateBook = Book::factory()->make();
 
-        $response = $this->put(route('admin.books.update', $this->book->id), $updateData);
+        $this
+            ->actingAs($admin)
+            ->put(route('admin.books.update', $book->id), $updateBook->toArray())
+            ->assertRedirect(route('admin.books.index'));
 
-        $response->assertRedirect(route('admin.books.index'));
-
-        $this->assertDatabaseHas('books', [
-            'id' => $this->book->id,
-            'name' => 'Updated Book Name',
-            'description' => 'Updated Description',
-            'writer' => 'Updated Writer',
-        ]);
+        $this->assertDatabaseHas('books', $updateBook->toArray());
     }
 
     public function test_data_soft_delete(): void
     {
-        $this->actingAs($this->admin);
+        $admin = User::factory()->admin()->create();
 
-        $response = $this->delete(route('admin.books.destroy', $this->book->id));
+        $book = Book::factory()->create();
 
-        $response->assertRedirect(route('admin.books.index'));
+        $this
+            ->actingAs($admin)
+            ->delete(route('admin.books.destroy', $book->id))
+            ->assertRedirect(route('admin.books.index'));
 
-        $this->assertSoftDeleted('books', [
-            'id' => $this->book->id,
-        ]);
+        $this->assertSoftDeleted('books', ['id' => $book->id]);
     }
 }

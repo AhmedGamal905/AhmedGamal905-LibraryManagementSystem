@@ -15,7 +15,7 @@ class EnsureAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        abort_if(auth()->user()->type == 'user', 403);
+        abort_if(auth()->user()->type->isUser(), 403);
 
         return $next($request);
     }

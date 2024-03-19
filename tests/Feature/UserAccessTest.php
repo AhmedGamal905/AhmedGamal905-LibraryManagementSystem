@@ -2,45 +2,33 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserType;
 use App\Models\User;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class UserAccessTest extends TestCase
 {
-    use RefreshDatabase;
-
-    protected User $admin;
-
-    protected User $user;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed(UserSeeder::class);
-        $this->admin = User::where('type', UserType::ADMIN)->first();
-        $this->user = User::where('type', UserType::USER)->first();
-    }
+    use LazilyRefreshDatabase;
 
     public function test_admin_has_access_to_create_new_books(): void
     {
+        $admin = User::factory()->admin()->create();
 
-        $this->actingAs($this->admin);
-
-        $response = $this->get('/admin/books/create');
-
-        $response->assertStatus(200);
+        // TODO: using route name
+        $this
+            ->actingAs($admin)
+            ->get('/admin/books/create')
+            ->assertStatus(200);
     }
 
     public function test_user_can_not_access_to_create_new_books(): void
     {
+        $user = User::factory()->create();
 
-        $this->actingAs($this->user);
-
-        $response = $this->get('/admin/books/create');
-
-        $response->assertStatus(403);
+        // TODO: using route name
+        $this
+            ->actingAs($user)
+            ->get('/admin/books/create')
+            ->assertStatus(403);
     }
 }

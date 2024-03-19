@@ -6,18 +6,14 @@ use App\Enums\BookStatus;
 use App\Enums\BorrowStatus;
 use App\Models\Book;
 use App\Models\Borrow;
-use Carbon\Carbon;
 
 class BorrowController
 {
     public function index()
     {
-        $borrowedBooks = Borrow::where('user_id', auth()->user()->id)
-            ->with([
-                'book' => function ($query) {
-                    return $query->withTrashed();
-                },
-            ])
+        $borrowedBooks = Borrow::query()
+            ->with('book')
+            ->where('user_id', auth()->id())
             ->latest()
             ->paginate();
 
@@ -26,25 +22,20 @@ class BorrowController
 
     public function store(Book $book)
     {
-        $data = [
-            'due_date' => Carbon::now()->addWeek(),
-            'book_id' => $book->id,
+        $book->update(['status' => BookStatus::UNAVAILABLE]);
+        $book->borrows()->create([
+            'due_date' => now()->addWeek(),
+            'user_id' => auth()->id(),
             'status' => BorrowStatus::INPROGRESS,
-            'user_id' => auth()->user()->id,
-        ];
-        $book->status = BookStatus::UNAVAILABLE;
-        $book->save();
-        Borrow::create($data);
+        ]);
 
         return to_route('user.borrow.index');
     }
 
-    public function update(Borrow $borrowedBook)
+    public function update(Borrow $borrow)
     {
-        $borrowedBook->status = BorrowStatus::RETURNED;
-        $borrowedBook->book->status = BookStatus::AVAILABLE;
-        $borrowedBook->save();
-        $borrowedBook->book->save();
+        $borrow->update(['status' => BorrowStatus::RETURNED]);
+        $borrow->book()->update(['status' => BookStatus::AVAILABLE]);
 
         return to_route('home');
     }
