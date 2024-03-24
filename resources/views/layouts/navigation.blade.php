@@ -15,13 +15,12 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @if (Auth::user()->type == 'admin')
+                    @if (Auth::user()->type->isAdmin())
                         <x-nav-link :href="route('admin.books.index')" :active="request()->routeIs('admin.books.*')">
                             {{ __('Books') }}
                         </x-nav-link>
-                    @endif
-                    @if (Auth::user()->type == 'user')
-                    <x-nav-link :href="route('user.borrow.index')" :active="request()->routeIs('user.books.*')">
+                    @else
+                        <x-nav-link :href="route('user.borrow.index')" :active="request()->routeIs('user.books.*')">
                             {{ __('Borrowing History') }}
                         </x-nav-link>
                     @endif
@@ -88,9 +87,16 @@
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.books.index')" :active="request()->routeIs('admin.books.*')">
-                {{ __('Books') }}
-            </x-responsive-nav-link>
+            @if (Auth::user()->type->isAdmin())
+                <x-responsive-nav-link :href="route('admin.books.index')" :active="request()->routeIs('admin.books.*')">
+                    {{ __('Books') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('user.borrow.index')" :active="request()->routeIs('user.books.*')">
+                    {{ __('Borrowing History') }}
+                </x-responsive-nav-link>
+            @endif
+
         </div>
 
         <!-- Responsive Settings Options -->
